@@ -3,8 +3,6 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 public class Customer {
     private String name;
     private List<Account> accounts;
@@ -26,15 +24,28 @@ public class Customer {
     public int getNumberOfAccounts() {
         return accounts.size();
     }
+    
+        public List<Account> getAccounts() {
+		return accounts;
+	}
 
-    public double totalInterestEarned() {
+        /**
+         * get total interest paid by the bank on all accounts
+         * @return
+         * @throws ApplicationException
+         */
+	public double totalInterestEarned() throws ApplicationException  { 
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account a : accounts) {
+        	 total += a.calculateInterestEarned();
+        }
         return total;
     }
-
-    public String getStatement() {
+/**
+ * usecase: customer request a statement that shows transaction
+ * totals for each of their accounts
+ */
+    public String getStatement() throws ApplicationException {
         String statement = null;
         statement = "Statement for " + name + "\n";
         double total = 0.0;
@@ -42,18 +53,28 @@ public class Customer {
             statement += "\n" + statementForAccount(a) + "\n";
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "\nTotal In All Accounts " + formatToDollars(total);
         return statement;
     }
 
+    /**
+     * TODO add null check
+     * TODO any exceptions?
+     * @param a
+     * @return
+     */
     private String statementForAccount(Account a) {
-        String s = "";
-
+         
+        String NEWLINE = "\n";
+        String SPACE = "  ";
+        String TOTAL = "Total ";
+        StringBuffer sb =  new StringBuffer(a.getAccountType().getName()).append(NEWLINE); 
+       /* remove this by using enum
        //Translate to pretty account type
         switch(a.getAccountType()){
             case Account.CHECKING:
                 s += "Checking Account\n";
-                break;
+                break; 
             case Account.SAVINGS:
                 s += "Savings Account\n";
                 break;
@@ -61,18 +82,26 @@ public class Customer {
                 s += "Maxi Savings Account\n";
                 break;
         }
+        */ 
+        
 
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            sb.append(SPACE).append(t.getTransactionType().getName()).append(SPACE);
+            sb.append(formatToDollars(t.amount)).append(NEWLINE);
             total += t.amount;
         }
-        s += "Total " + toDollars(total);
-        return s;
+        sb.append(TOTAL).append(formatToDollars(total));
+        return sb.toString();
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    /**
+     * changing visibility for unit test
+     * @param d
+     * @return
+     */
+    String formatToDollars(double d){
+        return String.format("$%,.2f", Math.abs(d));
     }
 }
