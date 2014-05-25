@@ -14,6 +14,10 @@ public class Bank {
         customers.add(customer);
     }
 
+    /**
+     * usecase: get a report showing the list of customers and number of accounts
+     * @return
+     */
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
@@ -27,16 +31,21 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
+    /**
+     * usecase: report showing the total interest paid by the bank on all accounts
+     * @return
+     * @throws ApplicationException
+     */
+    public double totalInterestPaid() throws ApplicationException { 
         double total = 0;
         for(Customer c: customers)
             total += c.totalInterestEarned();
         return total;
     }
 
-    public String getFirstCustomer() {
+    public String getFirstCustomer()   {
         try {
-            customers = null;
+            if (customers == null) return "No customers"; 
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();
