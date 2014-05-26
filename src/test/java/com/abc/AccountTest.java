@@ -21,9 +21,15 @@ public class AccountTest extends TestCase {
 		fail("Not yet implemented");
 	}
 
-	@Test
+	@Test  (expected = IllegalArgumentException.class)
 	public void testDeposit() {
-		fail("Not yet implemented");
+		  Account negativesavingsAccount = new Account(AccountTypeEnum.SAVINGS);
+		  try {
+		  negativesavingsAccount.deposit(fValue3); 
+		  } catch (Exception e) {
+			  
+			  assertTrue(e instanceof IllegalArgumentException);
+		  }
 	}
 
 	@Test
@@ -72,15 +78,18 @@ public class AccountTest extends TestCase {
 		 Transaction t2 = new Transaction(fValue2, new Account(AccountTypeEnum.SAVINGS));
 		 Transaction t3 = new Transaction(fValue3, new Account(AccountTypeEnum.MAXI_SAVINGS));
 		 Account checkingAccount = new Account(AccountTypeEnum.CHECKING);
-	     Account savingsAccount = new Account(AccountTypeEnum.SAVINGS);
+	     Account savingsAccount = new Account(AccountTypeEnum.SAVINGS); 
+	     
 	     Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 	     checkingAccount.deposit(fValue1);
-	     savingsAccount.deposit(fValue2); 
+	     savingsAccount.deposit(fValue2);  
 		 
 		 assertEquals(fValue1, checkingAccount.sumTransactionsByAccount(AccountTypeEnum.CHECKING)); 
-		 assertEquals(fValue2, savingsAccount.sumTransactionsByAccount(AccountTypeEnum.SAVINGS)); 
+		 assertEquals(fValue2, savingsAccount.sumTransactionsByAccount(AccountTypeEnum.SAVINGS));  
 	}
 
+ 
+	
 	@Test
 	public void testGetAccountType() {
 		fail("Not yet implemented");
@@ -92,8 +101,8 @@ public class AccountTest extends TestCase {
 	}
 
 	@Test
-	public void testClone() {
-		fail("Not yet implemented");
+	public void testClone() { 
+		 fail("Should not be able to clone an Account");
 	}
 
 }
