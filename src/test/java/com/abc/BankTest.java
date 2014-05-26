@@ -66,5 +66,13 @@ public class BankTest extends TestCase {
 			e.printStackTrace();
 		}
     }
+    
+    @Test
+    public void testGetFirstCustomer() {
+    	Bank newBank = new Bank(); 
+    	assertEquals( "No customers", newBank.getFirstCustomer());
+    	newBank.addCustomer(new Customer("oscar"));
+    	assertEquals( "oscar", newBank.getFirstCustomer());
+    }
 
 }
