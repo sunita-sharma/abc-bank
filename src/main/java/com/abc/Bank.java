@@ -46,7 +46,7 @@ public class Bank {
     public String getFirstCustomer()   {
         try {
             if (customers == null) return "No customers"; 
-            return customers.get(0).getName();
+            return (customers.size()>0 && null != customers.get(0)) ? customers.get(0).getName() : "No customers";
         } catch (Exception e){
             e.printStackTrace();
             return "Error";
